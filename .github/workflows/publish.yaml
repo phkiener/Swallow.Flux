@@ -27,7 +27,7 @@ jobs:
         run: dotnet test --configuration Debug --no-restore --no-build
 
       - name: Build (release)
-        run: dotnet build --configuration Release --no-restore -p:AssemblyVersion="${{ github.ref_name }}"
+        run: dotnet build --configuration Release --no-restore -p:Version="${{ github.ref_name }}"
 
       - name: Pack (on release)
         run: dotnet pack --configuration Release --no-build --output ./pack/ -p:Version="${{ github.ref_name }}"
