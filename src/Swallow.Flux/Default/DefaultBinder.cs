@@ -9,6 +9,24 @@ public sealed class DefaultBinder(IEmitter emitter) : IBinder
     private readonly List<IDisposable> bindings = [];
 
     /// <inheritdoc />
+    public IBinding Bind()
+    {
+        var binding = new Binding(null, emitter);
+        bindings.Add(binding);
+
+        return binding;
+    }
+
+    /// <inheritdoc />
+    public IBinding Bind(Action<Action> wrapper)
+    {
+        var binding = new Binding(wrapper, emitter);
+        bindings.Add(binding);
+
+        return binding;
+    }
+
+    /// <inheritdoc />
     public ITargetedBinding<T> Bind<T>(T target) where T : class
     {
         var binding = new TargetedBinding<T>(target, null, emitter);

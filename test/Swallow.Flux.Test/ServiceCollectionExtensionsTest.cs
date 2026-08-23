@@ -74,6 +74,10 @@ public sealed class ServiceCollectionExtensionsTest
 
     private sealed class DummyBinder : IBinder
     {
+        public IBinding Bind() => throw new NotImplementedException();
+
+        public IBinding Bind(Action<Action> wrapper) => throw new NotImplementedException();
+
         public ITargetedBinding<T> Bind<T>(T target) where T : class => throw new NotImplementedException();
 
         public ITargetedBinding<T> Bind<T>(T target, Action<Action> wrapper) where T : class => throw new NotImplementedException();
