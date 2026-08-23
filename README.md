@@ -7,6 +7,14 @@ No big deal, honestly. Use at your own risk.
 
 ## Usage
 
+Install the package from NuGet:
+
+```xml
+<PackageReference Include="Swallow.Flux" Version="*" />
+```
+
+You can find the latest version on [NuGet.org](https://www.nuget.org/packages/Swallow.Flux).
+
 Register the required services and all of your stores in your service collection:
 
 ```csharp
