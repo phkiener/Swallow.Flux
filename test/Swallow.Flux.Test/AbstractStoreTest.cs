@@ -14,7 +14,7 @@ public sealed partial class AbstractStoreTest
         await dispatcher.Dispatch(new BHappened());
         await dispatcher.Dispatch(new BHappened());
 
-        await Assert.That(store.CountA).IsEqualTo(1);
+        await Assert.That(store.CountA).IsEqualTo(2);
         await Assert.That(store.CountB).IsEqualTo(2);
         await Assert.That(store.CountAll).IsEqualTo(3);
     }
