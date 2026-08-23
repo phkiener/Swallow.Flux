@@ -1,6 +1,6 @@
 namespace Swallow.Flux.Default;
 
-public sealed class DefaultBinderTest
+public sealed partial class DefaultBinderTest
 {
     [Test]
     public async Task InvokesBoundReaction_OnRelevantNotification()
@@ -8,12 +8,11 @@ public sealed class DefaultBinderTest
         var emitter = new DefaultEmitter();
         var binder = new DefaultBinder(emitter);
 
-        const string target = "test";
         string receivedText = "";
-        binder.Bind(target).To<RelevantNotification>(t => receivedText += t);
+        binder.Bind().To<RelevantNotification>(() => receivedText += "received");
 
         emitter.Emit(new RelevantNotification());
-        await Assert.That(receivedText).IsEqualTo(target);
+        await Assert.That(receivedText).IsEqualTo("received");
     }
 
     [Test]
@@ -22,9 +21,8 @@ public sealed class DefaultBinderTest
         var emitter = new DefaultEmitter();
         var binder = new DefaultBinder(emitter);
 
-        const string target = "test";
         string receivedText = "";
-        binder.Bind(target).To<RelevantNotification>(t => receivedText += t);
+        binder.Bind().To<RelevantNotification>(() => receivedText += "received");
 
         emitter.Emit(new IrrelevantNotification());
         await Assert.That(receivedText).IsEmpty();
@@ -36,14 +34,13 @@ public sealed class DefaultBinderTest
         var emitter = new DefaultEmitter();
         var binder = new DefaultBinder(emitter);
 
-        const string target = "test";
         string receivedText = "";
-        binder.Bind(target)
-            .To<RelevantNotification>(t => receivedText += t)
-            .To<RelevantNotification>(t => receivedText += t);
+        binder.Bind()
+            .To<RelevantNotification>(() => receivedText += "received")
+            .To<RelevantNotification>(() => receivedText += "received");
 
         emitter.Emit(new RelevantNotification());
-        await Assert.That(receivedText).IsEqualTo(target + target);
+        await Assert.That(receivedText).IsEqualTo("received" + "received");
     }
 
     [Test]
@@ -52,14 +49,12 @@ public sealed class DefaultBinderTest
         var emitter = new DefaultEmitter();
         var binder = new DefaultBinder(emitter);
 
-        const string target = "test";
-        const string otherTarget = "TEST";
         string receivedText = "";
-        binder.Bind(target).To<RelevantNotification>(t => receivedText += t);
-        binder.Bind(otherTarget).To<RelevantNotification>(t => receivedText += t);
+        binder.Bind().To<RelevantNotification>(() => receivedText += "a");
+        binder.Bind().To<RelevantNotification>(() => receivedText += "b");
 
         emitter.Emit(new RelevantNotification());
-        await Assert.That(receivedText).IsEqualTo(target + otherTarget);
+        await Assert.That(receivedText).IsEqualTo("a" + "b");
     }
 
     [Test]
@@ -68,9 +63,8 @@ public sealed class DefaultBinderTest
         var emitter = new DefaultEmitter();
         var binder = new DefaultBinder(emitter);
 
-        const string target = "test";
         string receivedText = "";
-        binder.Bind(target, act => CatchAndWrite(act, ref receivedText)).To<RelevantNotification>(_ => throw new InvalidOperationException("wrong!"));
+        binder.Bind(act => CatchAndWrite(act, ref receivedText)).To<RelevantNotification>(() => throw new InvalidOperationException("wrong!"));
 
         emitter.Emit(new RelevantNotification());
         await Assert.That(receivedText).IsEqualTo("wrong!");
@@ -82,10 +76,9 @@ public sealed class DefaultBinderTest
         var emitter = new DefaultEmitter();
         var binder = new DefaultBinder(emitter);
 
-        const string target = "test";
         string receivedText = "";
 
-        binder.Bind(target).To<RelevantNotification>(t => receivedText += t, immediatelyInvoke: true);
+        binder.Bind().To<RelevantNotification>(() => receivedText += "test", immediatelyInvoke: true);
         await Assert.That(receivedText).IsEqualTo("test");
     }
 
@@ -95,10 +88,9 @@ public sealed class DefaultBinderTest
         var emitter = new DefaultEmitter();
         var binder = new DefaultBinder(emitter);
 
-        const string target = "test";
         ParameterizedNotification? receivedNotification = null;
 
-        binder.Bind(target).To<ParameterizedNotification>((_, n) => receivedNotification = n);
+        binder.Bind().To<ParameterizedNotification>(n => receivedNotification = n);
 
         emitter.Emit(new ParameterizedNotification(Id: 42));
         await Assert.That(receivedNotification?.Id).IsEqualTo(42);
@@ -110,10 +102,9 @@ public sealed class DefaultBinderTest
         var emitter = new DefaultEmitter();
         var binder = new DefaultBinder(emitter);
 
-        const string target = "test";
         ParameterizedNotification? receivedNotification = null;
 
-        binder.Bind(target).To<ParameterizedNotification>((_, n) => receivedNotification = n, immediatelyInvoke: true);
+        binder.Bind().To<ParameterizedNotification>(n => receivedNotification = n, immediatelyInvoke: true);
 
         await Assert.That(receivedNotification?.Id).IsEqualTo(99);
     }
@@ -124,12 +115,11 @@ public sealed class DefaultBinderTest
         var emitter = new DefaultEmitter();
         var binder = new DefaultBinder(emitter);
 
-        const string target = "test";
         int wrapperCalls = 0;
 
-        binder.Bind(target, act => { wrapperCalls += 1; act.Invoke(); })
-            .To<RelevantNotification>(_ => { }, immediatelyInvoke: true)
-            .To<RelevantNotification>((_, _) => { }, immediatelyInvoke: true);
+        binder.Bind(act => { wrapperCalls += 1; act.Invoke(); })
+            .To<RelevantNotification>(() => { }, immediatelyInvoke: true)
+            .To<RelevantNotification>(_ => { }, immediatelyInvoke: true);
 
         await Assert.That(wrapperCalls).IsEqualTo(2);
     }
