@@ -6,6 +6,9 @@
     <File Path="LICENSE.txt" />
     <File Path="README.md" />
   </Folder>
+  <Folder Name="/Additional Items/Workflows/">
+    <File Path=".github\workflows\publish.yaml" />
+  </Folder>
   <Project Path="src/Swallow.Flux/Swallow.Flux.csproj" />
   <Project Path="test/Swallow.Flux.Test/Swallow.Flux.Test.csproj" />
 </Solution>
