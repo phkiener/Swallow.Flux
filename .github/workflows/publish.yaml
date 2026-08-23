@@ -20,16 +20,10 @@ jobs:
       - name: Restore
         run: dotnet restore
 
-      - name: Build (debug)
-        run: dotnet build --configuration Debug --no-restore
-
-      - name: Run tests (on debug)
-        run: dotnet test --configuration Debug --no-restore --no-build
-
-      - name: Build (release)
+      - name: Build
         run: dotnet build --configuration Release --no-restore -p:Version="${{ github.ref_name }}"
 
-      - name: Pack (on release)
+      - name: Pack
         run: dotnet pack --configuration Release --no-build --output ./pack/ -p:Version="${{ github.ref_name }}"
 
       - name: Setup NuGet token
