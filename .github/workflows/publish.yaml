@@ -1,0 +1,45 @@
+name: Publish NuGet packages
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build (debug)
+        run: dotnet build --configuration Debug --no-restore
+
+      - name: Run tests (on debug)
+        run: dotnet test --configuration Debug --no-restore --no-build
+
+      - name: Build (release)
+        run: dotnet build --configuration Release --no-restore -p:AssemblyVersion="${{ github.ref_name }}"
+
+      - name: Pack (on release)
+        run: dotnet pack --configuration Release --no-build --output ./pack/ -p:Version="${{ github.ref_name }}"
+
+      - name: Push packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: pack-output
+          path: ./pack/*.nupkg
+
+      - name: Setup NuGet token
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
