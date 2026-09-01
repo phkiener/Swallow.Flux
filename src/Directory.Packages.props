@@ -1,0 +1,9 @@
+<Project>
+  <!-- Do not inherit the parent Directory.Packages.props so the changes to package dependencies are explicitly controlled. -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
+  </ItemGroup>
+</Project>

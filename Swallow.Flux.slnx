@@ -6,9 +6,14 @@
     <File Path="LICENSE.txt" />
     <File Path="README.md" />
   </Folder>
+  <Folder Name="/Additional Items/Package/">
+    <File Path="src/Directory.Build.props" />
+    <File Path="src/Directory.Build.targets" />
+    <File Path="src/Directory.Packages.props" />
+  </Folder>
   <Folder Name="/Additional Items/Workflows/">
-    <File Path=".github\workflows\build.yaml" />
-    <File Path=".github\workflows\publish.yaml" />
+    <File Path=".github/workflows/build.yaml" />
+    <File Path=".github/workflows/publish.yaml" />
   </Folder>
   <Project Path="src/Swallow.Flux/Swallow.Flux.csproj" />
   <Project Path="test/Swallow.Flux.Test/Swallow.Flux.Test.csproj" />

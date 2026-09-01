@@ -1,0 +1,36 @@
+<Project>
+  <Import Project="../Directory.Build.props" />
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DebugType>embedded</DebugType>
+    <EmbedAllSources>true</EmbedAllSources>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(Configuration) == 'Release'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package metadata">
+    <PackageTags>flux;ui;lightweight;swallow</PackageTags>
+    <Description>A very basic implementation of the Flux pattern. Small and without any ambitions.</Description>
+
+    <Authors>Philipp Kiener</Authors>
+    <Copyright>2025-2026 Philipp Kiener</Copyright>
+    <PackageProjectUrl>https://github.com/phkiener/Swallow.Flux</PackageProjectUrl>
+
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/phkiener/Swallow.Flux</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup Label="Package files">
+    <None Include="$(MSBuildThisFileDirectory)../README.md" Pack="true" PackagePath="/" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)../LICENSE.txt" Pack="true" PackagePath="/" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)../icon.png" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
+</Project>
